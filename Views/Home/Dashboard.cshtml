@@ -1,0 +1,51 @@
+@model User
+
+<div class="text-right">
+    <p><a class="btn mt-2 float-end" href="/">Log Out</a></p>
+</div>
+<div class="text-center">
+    <h1>Dojo Meet Up Center</h1>
+    <h3>Welcome @ViewBag.Login_User.First_Name @ViewBag.Login_User.Last_Name</h3>
+</div>
+<div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Meet Up</th>
+                <th scope="col">Date and Time</th>
+                <th scope="col">Duration</th>
+                <th scope="col">Event Cordinator</th>
+                <th scope="col">No.of Participants</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Meet_Up l in ViewBag.AllMeet_Ups)
+            {
+                <tr>
+                    <th scope="row"><a href="/view/@l.Meet_UpId">@l.Title</a></th>
+                    <td>@l.Date_and_Time.ToString("yyyy'-'MM'-'dd'  'HH':'mm' 'tt")</td>
+                    <td>@l.Duration @l.Duration_frame</td>
+                    <td>@l.Event_Coordinator.First_Name @l.Event_Coordinator.Last_Name</td>
+                    <td>@l.Users_Already_Joined.Count</td>
+                    <td>
+                        @if (l.UserId == ViewBag.Login_User.UserId)
+                        {
+                            <a href="/delete/@l.Meet_UpId">Delete</a>
+                        }
+                        else if (l.Users_Already_Joined.Any(m => m.UserId == ViewBag.Login_User.UserId))
+                        {
+                            <a href="/leave/@l.Meet_UpId">Leave</a>
+                        }
+                        else
+                        {
+                            <a href="/join/@l.Meet_UpId">Join</a>
+                        }
+                    </td>
+                </tr>
+            }
+    </table>
+</div>
+<div class="text-right">
+    <p><a class="btn mt-2 float-end" href="/add/Meet_up">Add New Activity</a></p>
+</div>
